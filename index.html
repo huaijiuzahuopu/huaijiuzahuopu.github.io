@@ -1,1 +1,126 @@
-hello world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tool</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/element-plus"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="Daily.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="container" style="margin-top: 20vh;">
+            <transition name="bounce">
+                <div v-show="show" class="container">
+                    <div class="container">
+                        <p>花茶</p>
+                        <el-input type="number" v-model="tea" style="width: 20vh;"/>
+                    </div>
+                    <el-button @click="next1" style="margin-top: 10vh;" type="success">继续</el-button>
+                </div>
+            </transition>
+
+            <transition name="bounce">
+                <div v-show="teashow" class="container">
+                    <div class="container">
+                        <p>客单量</p>
+                        <el-input type="number" v-model="amount" style="width: 20vh;"/>
+                    </div>
+                    <el-button @click="next2" style="margin-top: 10vh;" type="success">继续</el-button>
+                </div>
+            </transition>
+
+            <transition name="bounce">
+                <div v-show="dailyshow" class="container">
+                    <div class="container">
+                        <p>花茶: {{tea}}</p>
+                        <p>客单量: {{amount}}</p>
+                        <p>日报</p>
+                        <el-input autosize type="textarea" @input="onchange" v-model="daily" style="width: 30vh;"/>
+                    </div>
+                </div>
+            </transition>
+
+            <transition name="bounce">
+                <div v-show="boardshow" class="container">
+                    <div class="container">
+                        <p>剪切板</p>
+                        <el-input autosize type="textarea" v-model="board" style="width: 35vh;"/>
+                    </div>
+                </div>
+            </transition>
+        </div>
+    </div>
+    <script>
+        const { createApp } = Vue;
+        const app = createApp({
+            data() {
+                return {
+                    show:true,
+                    teashow:false,
+                    dailyshow:false,
+                    boardshow:false,
+                    amount:null,
+                    tea:null,
+                    daily:null,
+                    board:null,
+                    arr:[]
+                };
+            },
+            methods: {
+                next1(){
+                    this.show = false;
+                    setTimeout(() => {
+                        if(this.tea == null){
+                                this.show = true;
+                                return;
+                            }else{
+                                this.teashow = true
+                            }
+                    }, 600);
+                },
+                next2(){
+                    this.teashow = false;
+                    setTimeout(() => {
+                        if(this.amount == null){
+                                this.teashow = true;
+                                return;
+                            }else{
+                                this.dailyshow = true
+                            }
+                    }, 600);
+                },
+                onchange(){
+                    if(this.daily != null && this.daily.length > 100){
+                        let daily = new Daily(this.tea,this.amount,this.daily);
+                        this.copyToClipboard(daily.get_result());
+                    }
+                },
+                async  copyToClipboard(text) {
+                    this.dailyshow = false
+                    this.board = text
+                    this.boardshow = true
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        this.$message({
+                            message: '复制成功',
+                            type: 'success'
+                        });
+                    } catch (err) {
+                        this.
+                        this.$message({
+                            message: '已经将内容拷贝到剪切板，请手动复制',
+                            type: 'warning'
+                        });
+                    }
+                }
+            }
+        });
+        app.use(ElementPlus);
+        app.mount('#app');
+    </script>
+</body>
+</html>
