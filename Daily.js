@@ -103,10 +103,17 @@ class Daily{
         }
         this.info = new SalesInfo(this.daily)
         this.handel_sales()
-        console.log(this.info);
     }
     handel_sales(){
+        const current_day = new Date().getDay();
         this.set_value("日期",this.get_date());
+        this.set_value("今日目标",1500);
+        this.set_value("明日目标",1500)
+        if(current_day == 6 || current_day == 7){
+            this.set_value("今日目标",2000);
+        }else if(current_day + 1 == 6,current_day + 1 == 7){
+            this.set_value("明日目标",2000)
+        }
         this.set_value("今日合计",this.tea);
         this.set_value("客单量",this.amount)
         this.set_value("今日达成率",this.format(this.tea / this.info.today_target)+"%")
@@ -132,9 +139,31 @@ class Daily{
         return this.daily.join("\n")
     }
     get_date(){
+        const hours = new Date().getHours();
         const currentDate = new Date();
         const month = currentDate.getMonth() + 1;
         const day = currentDate.getDate();
+        function get_last_month(month_temp){
+            if(month_temp == 1){
+                return 12
+            }else{
+                return month_temp - 1;
+            }
+        }
+        
+        if(hours >= 0 && hours <=6){
+            if(day == 1){
+                if(month == 1){
+                    month = get_last_month();
+                    day = this.getTotalDaysInMonth(currentDate.getFullYear - 1,month);
+                }else{
+                    month = get_last_month();
+                    day = this.getTotalDaysInMonth(currentDate.getFullYear,month);
+                }
+                
+            }
+            day = day - 1;
+        }
         return `${month}/${day}`;
     }
     get_days(){
@@ -142,16 +171,17 @@ class Daily{
         const currentDate = new Date();
         const currentMonth = currentDate.getMonth();
         const currentDay = currentDate.getDate();
-        function getTotalDaysInMonth(year, month) {
-            return new Date(year, month + 1, 0).getDate();
-        }
+        
         const currentYear = currentDate.getFullYear();
-        const totalDaysInMonth = getTotalDaysInMonth(currentYear, currentMonth);
-        if(hours >= 0 && hours <= 6){
-            currentDay++;
+        const totalDaysInMonth = this.getTotalDaysInMonth(currentYear, currentMonth);
+        if(hours >= 0 && hours <=6){
+            currentDay = currentDay - 1;
         }
         const result = totalDaysInMonth - currentDay;
         return result === 0 ? 1 : result;
+    }
+    getTotalDaysInMonth(year, month) {
+        return new Date(year, month + 1, 0).getDate();
     }
     format(value){
         const intValue = Math.trunc(value * 100);
