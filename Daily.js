@@ -109,11 +109,12 @@ class Daily{
         this.set_value("日期",this.get_date());
         this.set_value("今日目标",1500);
         this.set_value("明日目标",1500)
-        if(current_day == 6 || current_day == 7){
+        if(current_day == 6 || current_day == 0){
             this.set_value("今日目标",2000);
-        }else if(current_day + 1 == 6,current_day + 1 == 7){
+        }else if(current_day + 1 == 6,current_day + 1 == 0){
             this.set_value("明日目标",2000)
         }
+        console.log(current_day);
         this.set_value("今日合计",this.tea);
         this.set_value("客单量",this.amount)
         this.set_value("今日达成率",this.format(this.tea / this.info.today_target)+"%")
