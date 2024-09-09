@@ -47,11 +47,7 @@ class SalesInfo{
             case "周目标":
                 this.weekly_target = parseFloat(this.get_value(text)); break;
             case "周完成":
-                if(this.isWeek()){
-                    this.weekly_total = 0;
-                }else{
-                    this.weekly_total = parseFloat(this.get_value(text)); break;
-                }
+                this.weekly_total = parseFloat(this.get_value(text)); break;
             case "周达成率":
                 this.weekly_ach = this.get_value(text); break;
             case "本月目标":
@@ -76,12 +72,6 @@ class SalesInfo{
         let flag = text.includes(":") ? ":" : "：";
         return text.split(flag)[1];
     }
-    isMonth(){
-        return new Date().getDate() === 1;
-    }
-    isWeek(){
-        return new Date().getDay() === 1;
-    }
 }
 class Daily{
     amount
@@ -105,6 +95,9 @@ class Daily{
         this.handel_sales()
     }
     handel_sales(){
+        if(this.isWeek()){
+            this.set_value("周达成率",0)
+        }
         const current_day = new Date().getDay();
         this.set_value("日期",this.get_date());
         this.set_value("今日目标",1500);
@@ -119,8 +112,7 @@ class Daily{
         this.set_value("客单量",this.amount)
         this.set_value("今日达成率",this.format(this.tea / this.info.today_target)+"%")
         this.set_value("周完成",parseFloat(this.info.weekly_total) +parseFloat(this.tea));
-        //this.set_value("周达成率",this.format(this.info.weekly_total/this.info.weekly_target)+"%")
-        this.set_value("周达成率",10)
+        this.set_value("周达成率",this.format(this.info.weekly_total/this.info.weekly_target)+"%")
         this.set_value("本月累计完成",parseFloat(this.info.monthly_total) +parseFloat(this.tea));
         this.set_value("本月达标率",this.format(this.info.monthly_total/this.info.monthly_target)+"%")
     }
@@ -197,6 +189,11 @@ class Daily{
         const result = `${intValue}.${decimalPart.toString().padStart(2, '0')}`;
         return result;
     }
-
+    isMonth(){
+        return new Date().getDate() === 1;
+    }
+    isWeek(){
+        return new Date().getDay() === 1;
+    }
 }
 
