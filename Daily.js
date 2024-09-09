@@ -91,9 +91,6 @@ class Daily{
         this.handel_sales()
     }
     handel_sales(){
-        if(this.isWeek()){
-            this.set_value("周达成率",0)
-        }
         const current_day = new Date().getDay();
         this.set_value("日期",this.get_date());
         this.set_value("今日目标",1500);
