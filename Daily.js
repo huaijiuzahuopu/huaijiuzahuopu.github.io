@@ -47,13 +47,21 @@ class SalesInfo{
             case "周目标":
                 this.weekly_target = parseFloat(this.get_value(text)); break;
             case "周完成":
-                this.weekly_total = parseFloat(this.get_value(text)); break;
+                if(this.isWeek()){
+                    this.weekly_total = 0;
+                }else{
+                    this.weekly_total = parseFloat(this.get_value(text)); break;
+                }
             case "周达成率":
                 this.weekly_ach = this.get_value(text); break;
             case "本月目标":
                 this.monthly_target = parseFloat(this.get_value(text)); break;
             case "本月累计完成":
-                this.monthly_total = parseFloat(this.get_value(text)); break;
+                if(this.isMonth()){
+                    this.monthly_total = 0;
+                }else{
+                    this.monthly_total = parseFloat(this.get_value(text)); break;
+                }
             case "本月达标率":
                 this.monthly_ach = this.get_value(text); break;
             case "今日合计":
@@ -67,6 +75,12 @@ class SalesInfo{
     get_value(text){
         let flag = text.includes(":") ? ":" : "：";
         return text.split(flag)[1];
+    }
+    isMonth(){
+        return new Date().getDate() === 1;
+    }
+    isWeek(){
+        return new Date().getDay() === 1;
     }
 }
 class Daily{
@@ -182,11 +196,5 @@ class Daily{
         const result = `${intValue}.${decimalPart.toString().padStart(2, '0')}`;
         return result;
     }
-    isMonth(){
-        return new Date().getDate() === 1;
-    }
-    isWeek(){
-        return new Date().getDay() === 1;
-    }
-}
 
+}
