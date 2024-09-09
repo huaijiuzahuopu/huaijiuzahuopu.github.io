@@ -119,7 +119,8 @@ class Daily{
         this.set_value("客单量",this.amount)
         this.set_value("今日达成率",this.format(this.tea / this.info.today_target)+"%")
         this.set_value("周完成",parseFloat(this.info.weekly_total) +parseFloat(this.tea));
-        this.set_value("周达成率",this.format(this.info.weekly_total/this.info.weekly_target)+"%")
+        //this.set_value("周达成率",this.format(this.info.weekly_total/this.info.weekly_target)+"%")
+        this.set_value("周达成率",10)
         this.set_value("本月累计完成",parseFloat(this.info.monthly_total) +parseFloat(this.tea));
         this.set_value("本月达标率",this.format(this.info.monthly_total/this.info.monthly_target)+"%")
     }
