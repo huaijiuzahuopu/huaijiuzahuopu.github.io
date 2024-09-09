@@ -53,11 +53,7 @@ class SalesInfo{
             case "本月目标":
                 this.monthly_target = parseFloat(this.get_value(text)); break;
             case "本月累计完成":
-                if(this.isMonth()){
-                    this.monthly_total = 0;
-                }else{
-                    this.monthly_total = parseFloat(this.get_value(text)); break;
-                }
+                this.monthly_total = parseFloat(this.get_value(text)); break;
             case "本月达标率":
                 this.monthly_ach = this.get_value(text); break;
             case "今日合计":
